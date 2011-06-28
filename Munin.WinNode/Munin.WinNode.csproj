@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandManager.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\ListCommand.cs" />
+    <Compile Include="Commands\TestCommand.cs" />
+    <Compile Include="Commands\UnknownCommand.cs" />
+    <Compile Include="Commands\VersionCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TcpServer.cs" />

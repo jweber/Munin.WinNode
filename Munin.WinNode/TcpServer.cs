@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Munin.WinNode.Commands;
 
 namespace Munin.WinNode
 {
@@ -40,7 +41,7 @@ namespace Munin.WinNode
                 var dataString = new StringBuilder();
                 using (var stream = client.GetStream())
                 {
-                    var welcomeMessage = Encoding.ASCII.GetBytes("Connected to Munin.WinNode\n");
+                    var welcomeMessage = Encoding.ASCII.GetBytes("# Connected to Munin.WinNode" + Environment.NewLine);
                     stream.Write(welcomeMessage, 0, welcomeMessage.Length);
 
                     int readCount;
@@ -70,9 +71,14 @@ namespace Munin.WinNode
 
         static void MessageHandler(NetworkStream stream, string message)
         {
-            Console.WriteLine(message);
-            var echoMessage = Encoding.ASCII.GetBytes("Echo: " + message);
-            stream.Write(echoMessage, 0, echoMessage.Length);
+            var command = CommandManager.CommandFromName(message) ?? new UnknownCommand();
+            string response = null;
+            command.Execute(out response);
+            if (! string.IsNullOrEmpty(response))
+            {
+                var responseBytes = Encoding.ASCII.GetBytes(response + Environment.NewLine);
+                stream.Write(responseBytes, 0, responseBytes.Length);
+            }
         }
     }
 }
