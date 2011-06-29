@@ -75,9 +75,11 @@ namespace Munin.WinNode
 
         static void MessageHandler(NetworkStream stream, string message)
         {
-            var command = CommandManager.CommandFromName(message) ?? new UnknownCommand();
+            var command = CommandManager.CommandFromName(message);
+            
             string response = null;
             command.Execute(out response);
+            
             if (! string.IsNullOrEmpty(response))
             {
                 var responseBytes = Encoding.ASCII.GetBytes(response + Environment.NewLine);

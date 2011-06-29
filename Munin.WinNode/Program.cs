@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Munin.WinNode.Commands;
 
@@ -11,6 +12,7 @@ namespace Munin.WinNode
             new Task(() => new TcpServer()).Start();
 
             Console.WriteLine(string.Format("Munin.WinNode version: {0}", VersionCommand.GetVersionString()));
+            Console.WriteLine(string.Format("Listening on {0}:{1}", Dns.GetHostName(), 4949));
             Console.WriteLine("Press <enter> to stop");
             while(true)
             {

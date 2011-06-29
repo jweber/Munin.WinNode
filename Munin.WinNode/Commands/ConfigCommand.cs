@@ -3,13 +3,13 @@
 namespace Munin.WinNode.Commands
 {
     /// <summary>
-    /// Returns a list of all available plugins on this node
+    /// Returns the configuration for the specified plugin
     /// </summary>
-    class ListCommand : ICommand
+    class ConfigCommand : ICommand
     {
         public string Command
         {
-            get { return "list"; }
+            get { return "config"; }
         }
 
         public void Execute(out string response)

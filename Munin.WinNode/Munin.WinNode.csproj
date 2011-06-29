@@ -44,9 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandManager.cs" />
+    <Compile Include="Commands\ConfigCommand.cs" />
+    <Compile Include="Commands\FetchCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ListCommand.cs" />
-    <Compile Include="Commands\TestCommand.cs" />
+    <Compile Include="Commands\NodesCommand.cs" />
     <Compile Include="Commands\UnknownCommand.cs" />
     <Compile Include="Commands\VersionCommand.cs" />
     <Compile Include="Program.cs" />
