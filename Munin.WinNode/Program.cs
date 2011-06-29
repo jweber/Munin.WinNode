@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
+using Munin.WinNode.Commands;
 
 namespace Munin.WinNode
 {
@@ -10,7 +10,8 @@ namespace Munin.WinNode
         {
             new Task(() => new TcpServer()).Start();
 
-            Console.WriteLine("Press enter to stop");
+            Console.WriteLine(string.Format("Munin.WinNode version: {0}", VersionCommand.GetVersionString()));
+            Console.WriteLine("Press <enter> to stop");
             while(true)
             {
                 var readLine = Console.ReadLine() ?? "";

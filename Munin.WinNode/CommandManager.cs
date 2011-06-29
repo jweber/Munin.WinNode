@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Munin.WinNode.Commands;
 
 namespace Munin.WinNode
 {
     static class CommandManager
     {
-        static IEnumerable<ICommand> _commands;
+        static readonly IEnumerable<ICommand> _commands;
         
         static CommandManager()
         {

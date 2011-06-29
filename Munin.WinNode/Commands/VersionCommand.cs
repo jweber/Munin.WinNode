@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 
 namespace Munin.WinNode.Commands
 {
@@ -15,12 +11,16 @@ namespace Munin.WinNode.Commands
 
         public void Execute(out string response)
         {
-            var version = typeof(Program).Assembly.GetName().Version;
-            response = string.Format("Munin.WinNode on {0} version: {1}.{2}.{3}",
+
+            response = string.Format("Munin.WinNode on {0} version: {1}",
                                      Dns.GetHostName(),
-                                     version.Major,
-                                     version.Minor,
-                                     version.Build);
+                                     GetVersionString());
+        }
+
+        public static string GetVersionString()
+        {
+            var version = typeof(Program).Assembly.GetName().Version;
+            return string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build);
         }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using Munin.WinNode.Commands;
 
 namespace Munin.WinNode
@@ -19,7 +17,7 @@ namespace Munin.WinNode
             listener.Start(1);
             listener.BeginAcceptTcpClient(ReceiveTcpClient, listener);
 
-            Console.WriteLine("Waiting for connection");
+            Trace.WriteLine("Waiting for connection...");
         }
 
         string NormalizeMessage(string message)
@@ -29,20 +27,25 @@ namespace Munin.WinNode
             return message;
         }
 
+        void WelcomeMessage(Stream stream)
+        {
+            var welcomeMessage = Encoding.ASCII.GetBytes(string.Format("# Connected to Munin.WinNode on {0}{1}", Dns.GetHostName(), Environment.NewLine));
+            stream.Write(welcomeMessage, 0, welcomeMessage.Length);
+        }
+
         void ReceiveTcpClient(IAsyncResult asyncResult)
         {
             var listener = (TcpListener) asyncResult.AsyncState;
             if (listener.Server.IsBound)
             {
                 var client = listener.EndAcceptTcpClient(asyncResult);
-                Console.WriteLine("Received connection from {0}", client.Client.RemoteEndPoint);
+                Trace.WriteLine(string.Format("Received connection from {0}", client.Client.RemoteEndPoint));
 
                 var data = new byte[client.ReceiveBufferSize];
                 var dataString = new StringBuilder();
                 using (var stream = client.GetStream())
                 {
-                    var welcomeMessage = Encoding.ASCII.GetBytes("# Connected to Munin.WinNode" + Environment.NewLine);
-                    stream.Write(welcomeMessage, 0, welcomeMessage.Length);
+                    WelcomeMessage(stream);
 
                     int readCount;
                     while ((readCount = stream.Read(data, 0, client.ReceiveBufferSize)) != 0)
@@ -60,7 +63,8 @@ namespace Munin.WinNode
                         }
                     }
 
-                    Console.WriteLine("Closing connection from {0}", client.Client.RemoteEndPoint);
+                    
+                    Trace.WriteLine(string.Format("Closing connection from {0}", client.Client.RemoteEndPoint));
                 }
 
                 client.Close();
