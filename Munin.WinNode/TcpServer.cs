@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -75,10 +76,11 @@ namespace Munin.WinNode
 
         static void MessageHandler(NetworkStream stream, string message)
         {
-            var command = CommandManager.CommandFromName(message);
+            var messageParts = MessageParts.FromString(message);
+            var command = CommandManager.CommandFromName(messageParts.Command);
             
             string response = null;
-            command.Execute(out response);
+            command.Execute(messageParts.Arguments, out response);
             
             if (! string.IsNullOrEmpty(response))
             {

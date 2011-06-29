@@ -13,9 +13,9 @@ namespace Munin.WinNode.Commands
             get { return "nodes"; }
         }
 
-        public void Execute(out string response)
+        public void Execute(string[] arguments, out string response)
         {
-            response = string.Format("{0}{1}.{1}", Dns.GetHostName(), Environment.NewLine);
+            response = string.Format("{0}{1}.", Dns.GetHostName(), Environment.NewLine);
         }
     }
 }

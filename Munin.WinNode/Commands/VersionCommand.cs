@@ -9,7 +9,7 @@ namespace Munin.WinNode.Commands
             get { return "version"; }
         }
 
-        public void Execute(out string response)
+        public void Execute(string[] arguments, out string response)
         {
 
             response = string.Format("Munin.WinNode on {0} version: {1}",

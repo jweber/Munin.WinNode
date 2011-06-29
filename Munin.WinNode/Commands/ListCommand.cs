@@ -12,9 +12,9 @@ namespace Munin.WinNode.Commands
             get { return "list"; }
         }
 
-        public void Execute(out string response)
+        public void Execute(string[] arguments, out string response)
         {
-            throw new NotImplementedException();
+            response = string.Join(" ", PluginManager.AllPlugins());
         }
     }
 }

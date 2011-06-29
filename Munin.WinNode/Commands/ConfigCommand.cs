@@ -5,16 +5,16 @@ namespace Munin.WinNode.Commands
     /// <summary>
     /// Returns the configuration for the specified plugin
     /// </summary>
-    class ConfigCommand : ICommand
+    class ConfigCommand : FetchCommand
     {
-        public string Command
+        public override string Command
         {
             get { return "config"; }
         }
 
-        public void Execute(out string response)
+        protected override string PluginValue(IPlugin plugin)
         {
-            throw new NotImplementedException();
+            return plugin.GetConfiguration();
         }
     }
 }

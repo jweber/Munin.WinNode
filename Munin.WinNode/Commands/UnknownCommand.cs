@@ -7,7 +7,7 @@
             get { return "unknown"; }
         }
 
-        public void Execute(out string response)
+        public void Execute(string[] arguments, out string response)
         {
             var commands = CommandManager.AllCommands();
             response = string.Format("# Unknown command. Try {0} or quit", string.Join(", ", commands));
