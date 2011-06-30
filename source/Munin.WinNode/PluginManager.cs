@@ -6,19 +6,17 @@ namespace Munin.WinNode
 {
     static class PluginManager
     {
-        static readonly IEnumerable<IPlugin> _plugins;
+        static IEnumerable<IPlugin> _plugins;
         
-        static PluginManager()
+        /// <summary>
+        /// Registers all plugins
+        /// </summary>
+        public static void RegisterPlugins()
         {
-            _plugins = FindPlugins();
-        }
-
-        static IEnumerable<IPlugin> FindPlugins()
-        {
-            return (from t in typeof(IPlugin).Assembly.GetTypes()
-                    where typeof(IPlugin).IsAssignableFrom(t)
-                        && ! t.IsInterface
-                    select Activator.CreateInstance(t)).Cast<IPlugin>().ToList();
+            _plugins = (from t in typeof(IPlugin).Assembly.GetTypes()
+                        where typeof(IPlugin).IsAssignableFrom(t)
+                              && ! t.IsInterface
+                        select Activator.CreateInstance(t)).Cast<IPlugin>().ToList();
         }
 
         /// <summary>
