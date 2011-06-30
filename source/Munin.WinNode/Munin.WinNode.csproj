@@ -72,6 +72,7 @@
     <Compile Include="Commands\VersionCommand.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="MessageParts.cs" />
+    <Compile Include="OutputExtensions.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugins\CpuPlugin.cs" />
     <Compile Include="Plugins\NetworkPlugin.cs" />

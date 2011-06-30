@@ -9,6 +9,11 @@ namespace Munin.WinNode.Commands
             get { return "version"; }
         }
 
+        public bool EndWithPeriod
+        {
+            get { return false; }
+        }
+
         public void Execute(string[] arguments, out string response)
         {
 

@@ -13,9 +13,14 @@ namespace Munin.WinNode.Commands
             get { return "nodes"; }
         }
 
+        public bool EndWithPeriod
+        {
+            get { return true; }
+        }
+
         public void Execute(string[] arguments, out string response)
         {
-            response = string.Format("{0}{1}.", Dns.GetHostName(), Environment.NewLine);
+            response = string.Format("{0}", Dns.GetHostName());
         }
     }
 }

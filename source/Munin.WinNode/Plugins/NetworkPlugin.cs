@@ -23,16 +23,33 @@ namespace Munin.WinNode.Plugins
 
         public string GetConfiguration()
         {
-            return "network configuration";
+            return new[]
+                   {
+                       "graph_title Network Traffic",
+                       "graph_order down up",
+                       "graph_args --base 1000",
+                       "graph_vlabel bits in (-) / out (+) per second",
+                       "graph_category network",
+                       "graph_info This graph shows the traffic of the network interfaces.",
+                       "down.label bps",
+                       "down.type DERIVE",
+                       "down.graph no",
+                       "up.label bps",
+                       "up.type DERIVE",
+                       "up.negative down",
+                   }.Combine();
         }
 
         public string GetValues()
         {
             Trace.WriteLine("Fetching network statistics");
-            return string.Format("down.value {1:0}{0}up.value {2:0}",
-                                 Environment.NewLine,
-                                 GetTotalBitsReceivedPerSecond(),
-                                 GetTotalBitsSentPerSecond());
+
+            return new[]
+                   {
+                       string.Format("down.value {0:0}", GetTotalBitsReceivedPerSecond()),
+                       string.Format("up.value {0:0}", GetTotalBitsSentPerSecond())
+                   }.Combine();
+            
         }
 
         private float GetTotalBitsReceivedPerSecond()

@@ -15,6 +15,11 @@ namespace Munin.WinNode
             get { return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationFileName); }
         }
 
+        public static string NewLine
+        {
+            get { return "\n"; }
+        }
+
         public static string GetValue(string section, string key, string defaultValue)
         {
             var retVal = new StringBuilder(255);

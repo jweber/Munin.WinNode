@@ -66,17 +66,20 @@ namespace Munin.WinNode
         {
             var tcpClient = (TcpClient) client;
             Trace.WriteLine(string.Format("Received connection from {0}", tcpClient.Client.RemoteEndPoint));
-
+            
             var data = new byte[tcpClient.ReceiveBufferSize];
             var dataString = new StringBuilder();
+          
             using (var stream = tcpClient.GetStream())
             {
                 WelcomeMessage(stream);
 
                 int readCount;
+                
                 while ((readCount = stream.Read(data, 0, tcpClient.ReceiveBufferSize)) != 0)
                 {
                     dataString.Append(Encoding.ASCII.GetString(data, 0, readCount));
+                    Trace.WriteLine("Input: " + Regex.Replace(dataString.ToString(), @"\r?\n", string.Empty));
                     if (Regex.IsMatch(dataString.ToString(), @"\r?\n"))
                     {
                         string message = NormalizeMessage(dataString.ToString());
@@ -104,7 +107,7 @@ namespace Munin.WinNode
 
         void WelcomeMessage(Stream stream)
         {
-            var welcomeMessage = Encoding.ASCII.GetBytes(string.Format("# Connected to Munin.WinNode on {0}{1}", Dns.GetHostName(), Environment.NewLine));
+            var welcomeMessage = Encoding.ASCII.GetBytes(string.Format("# munin node at {0}{1}", Dns.GetHostName(), Configuration.NewLine));
             stream.Write(welcomeMessage, 0, welcomeMessage.Length);
         }
 
@@ -118,8 +121,14 @@ namespace Munin.WinNode
             
             if (! string.IsNullOrEmpty(response))
             {
-                var responseBytes = Encoding.ASCII.GetBytes(string.Format("{1}{0}.{0}", Environment.NewLine, response));
+                string responseMessage = string.Format("{1}{0}", Configuration.NewLine, response);
+                if (command.EndWithPeriod)
+                    responseMessage += "." + Configuration.NewLine;
+
+                var responseBytes = Encoding.ASCII.GetBytes(responseMessage);
                 stream.Write(responseBytes, 0, responseBytes.Length);
+
+                Trace.WriteLine("Response:" + Configuration.NewLine + responseMessage + Configuration.NewLine);
             }
         }
     }

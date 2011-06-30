@@ -12,6 +12,11 @@ namespace Munin.WinNode.Commands
             get { return "list"; }
         }
 
+        public bool EndWithPeriod
+        {
+            get { return false; }
+        }
+
         public void Execute(string[] arguments, out string response)
         {
             response = string.Join(" ", PluginManager.AllPlugins());

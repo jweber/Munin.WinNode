@@ -12,6 +12,11 @@ namespace Munin.WinNode.Commands
             get { return "fetch"; }
         }
 
+        public bool EndWithPeriod
+        {
+            get { return true; }
+        }
+
         public void Execute(string[] arguments, out string response)
         {
             if (arguments == null || arguments.Length == 0)
