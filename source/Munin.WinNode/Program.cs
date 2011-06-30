@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Threading.Tasks;
 using Munin.WinNode.Commands;
 
 namespace Munin.WinNode
@@ -9,9 +8,8 @@ namespace Munin.WinNode
     {
         static void Main(string[] args)
         {
-            new TcpServer();
-
-            PluginManager.AllPlugins();
+            var tcpServer = new TcpServer();
+            tcpServer.Start();
 
             Console.WriteLine(string.Format("Munin.WinNode version: {0}", VersionCommand.GetVersionString()));
             Console.WriteLine(string.Format("Listening on {0}:{1}", Dns.GetHostName(), 4949));
@@ -25,6 +23,7 @@ namespace Munin.WinNode
                         Console.Clear();
                         break;
                     default:
+                        tcpServer.Stop();
                         return;
                 }
             }
