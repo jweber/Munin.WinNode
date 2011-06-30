@@ -2,7 +2,7 @@
 
 namespace Munin.WinNode
 {
-    class MessageParts
+    public class MessageParts
     {
         private MessageParts()
         {
