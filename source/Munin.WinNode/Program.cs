@@ -12,7 +12,7 @@ namespace Munin.WinNode
             tcpServer.Start();
 
             Console.WriteLine(string.Format("Munin.WinNode version: {0}", VersionCommand.GetVersionString()));
-            Console.WriteLine(string.Format("Listening on {0}:{1}", Dns.GetHostName(), 4949));
+            Console.WriteLine(string.Format("Listening on {0}:{1}", tcpServer.Host, tcpServer.Port));
             Console.WriteLine("Press <enter> to stop");
             while(true)
             {

@@ -48,6 +48,7 @@
     <Compile Include="CommandManager.cs" />
     <Compile Include="Commands\ConfigCommand.cs" />
     <Compile Include="Commands\FetchCommand.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="Commands\ListCommand.cs" />
     <Compile Include="Commands\NodesCommand.cs" />
@@ -64,6 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="munin-node.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

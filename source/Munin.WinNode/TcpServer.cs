@@ -16,8 +16,22 @@ namespace Munin.WinNode
 
         public TcpServer()
         {
-            _listener = new TcpListener(IPAddress.Any, 4949);
+            this.Host = Configuration.GetValue("MuninNode", "Host", "*");
+            this.Port = Configuration.GetValue("MuninNode", "Port", 4949);
+            
+            _listener = new TcpListener(HostToIpAddress(this.Host), this.Port);
             _thread = new Thread(ListenForClient);
+        }
+
+        public string Host { get; private set; }
+        public int Port { get; private set; }
+
+        private IPAddress HostToIpAddress(string host)
+        {
+            if (string.IsNullOrWhiteSpace(host) || host == "*")
+                return IPAddress.Any;
+
+            return IPAddress.Parse(host);
         }
 
         public void Start()
