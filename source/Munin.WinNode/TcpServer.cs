@@ -104,7 +104,7 @@ namespace Munin.WinNode
             
             if (! string.IsNullOrEmpty(response))
             {
-                var responseBytes = Encoding.ASCII.GetBytes(response + Environment.NewLine);
+                var responseBytes = Encoding.ASCII.GetBytes(string.Format("{1}{0}.{0}", Environment.NewLine, response));
                 stream.Write(responseBytes, 0, responseBytes.Length);
             }
         }

@@ -86,6 +86,9 @@ namespace Munin.WinNode.Plugins
                 this.Name = name;
                 this._receivedPerformanceCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", name);
                 this._sentPerformanceCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", name);
+
+                var initReceive = _receivedPerformanceCounter.NextValue();
+                var initSent = _sentPerformanceCounter.NextValue();
             }
 
             public string Name { get; private set; }
