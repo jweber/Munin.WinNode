@@ -20,7 +20,7 @@ namespace Munin.WinNode
                     where typeof(ICommand).IsAssignableFrom(t)
                         && ! t.IsInterface
                         && t != typeof(UnknownCommand)
-                    select Activator.CreateInstance(t)).Cast<ICommand>();
+                    select Activator.CreateInstance(t)).Cast<ICommand>().ToList();
         }
 
         /// <summary>

@@ -8,11 +8,11 @@ namespace Munin.WinNode.Plugins
 {
     class NetworkPlugin : IPlugin
     {
-        IList<NetworkAdapter> _networkAdapters;
+        readonly IList<NetworkAdapter> _networkAdapters;
 
         public NetworkPlugin()
         {
-            _networkAdapters = new List<NetworkAdapter>();
+            _networkAdapters = new List<NetworkAdapter>();           
             EnumerateNetworkAdapters();
         }
 
@@ -28,20 +28,21 @@ namespace Munin.WinNode.Plugins
 
         public string GetValues()
         {
-            return string.Format("down.value {1:0.00}{0}up.value {2:0.00}",
+            Trace.WriteLine("Fetching network statistics");
+            return string.Format("down.value {1:0}{0}up.value {2:0}",
                                  Environment.NewLine,
-                                 GetTotalBytesReceivedPerSecond(),
-                                 GetTotalBytesSentPerSecond());
+                                 GetTotalBitsReceivedPerSecond(),
+                                 GetTotalBitsSentPerSecond());
         }
 
-        private float GetTotalBytesReceivedPerSecond()
+        private float GetTotalBitsReceivedPerSecond()
         {
-            return _networkAdapters.Sum(m => m.BytesReceivedPerSecond);
+            return _networkAdapters.Sum(m => m.BitsPerSecondReceived);
         }
 
-        private float GetTotalBytesSentPerSecond()
+        private float GetTotalBitsSentPerSecond()
         {
-            return _networkAdapters.Sum(m => m.BytesSentPerSecond);
+            return _networkAdapters.Sum(m => m.BitsPerSecondSent);
         }
 
         /// <summary>
@@ -50,6 +51,7 @@ namespace Munin.WinNode.Plugins
         /// </summary>
         void EnumerateNetworkAdapters()
         {
+            Trace.WriteLine("Enumerating network adapters");
             var search = new ManagementObjectSearcher(
                 @"SELECT * FROM Win32_NetworkAdapter 
                 WHERE NetConnectionStatus=2
@@ -61,6 +63,8 @@ namespace Munin.WinNode.Plugins
             foreach (ManagementObject adapterObject in adapterObjects)
             {
                 string name = adapterObject["Name"].ToString();
+                Trace.WriteLine(" + Found network adapter named: " + name);
+
                 var networkAdapter = new NetworkAdapter(name);
                 _networkAdapters.Add(networkAdapter);
             }
@@ -86,17 +90,24 @@ namespace Munin.WinNode.Plugins
 
             public string Name { get; private set; }
             
-            public float BytesReceivedPerSecond
+            public float BitsPerSecondReceived
             {
                 get
                 {
-                    return _receivedPerformanceCounter.NextValue();
+                    var bps = _receivedPerformanceCounter.NextValue() * 8;
+                    Trace.WriteLine(string.Format(" + Adapter '{0}' received bps: {1}", this.Name, bps));
+                    return bps;
                 }
             }
             
-            public float BytesSentPerSecond
+            public float BitsPerSecondSent
             {
-                get { return _sentPerformanceCounter.NextValue(); }
+                get
+                {
+                    var bps = _sentPerformanceCounter.NextValue() * 8;
+                    Trace.WriteLine(string.Format(" + Adapter '{0}' sent bps: {1}", this.Name, bps));
+                    return bps;
+                }
             }
         }
     }

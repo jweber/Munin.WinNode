@@ -9,7 +9,9 @@ namespace Munin.WinNode
     {
         static void Main(string[] args)
         {
-            new Task(() => new TcpServer()).Start();
+            new TcpServer();
+
+            PluginManager.AllPlugins();
 
             Console.WriteLine(string.Format("Munin.WinNode version: {0}", VersionCommand.GetVersionString()));
             Console.WriteLine(string.Format("Listening on {0}:{1}", Dns.GetHostName(), 4949));

@@ -18,7 +18,7 @@ namespace Munin.WinNode
             return (from t in typeof(IPlugin).Assembly.GetTypes()
                     where typeof(IPlugin).IsAssignableFrom(t)
                         && ! t.IsInterface
-                    select Activator.CreateInstance(t)).Cast<IPlugin>();
+                    select Activator.CreateInstance(t)).Cast<IPlugin>().ToList();
         }
 
         /// <summary>

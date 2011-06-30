@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using Munin.WinNode.Commands;
 
 namespace Munin.WinNode
 {
@@ -15,7 +13,7 @@ namespace Munin.WinNode
         public TcpServer()
         {           
             var listener = new TcpListener(IPAddress.Any, 4949);
-            listener.Start(1);
+            listener.Start();
             listener.BeginAcceptTcpClient(ReceiveTcpClient, listener);
 
             Trace.WriteLine("Waiting for connection...");
@@ -64,7 +62,6 @@ namespace Munin.WinNode
                         }
                     }
 
-                    
                     Trace.WriteLine(string.Format("Closing connection from {0}", client.Client.RemoteEndPoint));
                 }
 
