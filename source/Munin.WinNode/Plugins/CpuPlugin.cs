@@ -35,7 +35,7 @@ namespace Munin.WinNode.Plugins
                          {
                             "graph_title CPU Usage",
                             "graph_order system user idle",
-                            "graph_args --base 1000 -r --lower-limit 0 --upper-limit 100",
+                            "graph_args --base 1000 --rigid --lower-limit 0 --upper-limit 100",
                             "graph_vlabel %",
                             "graph_scale no",
                             "graph_info This graph shows how CPU time is spent.",

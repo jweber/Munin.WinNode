@@ -75,6 +75,7 @@
     <Compile Include="OutputExtensions.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Plugins\CpuPlugin.cs" />
+    <Compile Include="Plugins\MemoryPlugin.cs" />
     <Compile Include="Plugins\NetworkPlugin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
