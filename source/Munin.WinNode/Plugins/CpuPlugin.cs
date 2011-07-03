@@ -65,9 +65,9 @@ namespace Munin.WinNode.Plugins
         {
             var output = new[]
                          {
-                             string.Format("system.value {0:0}", _systemCounter.NextValue()),
-                             string.Format("user.value {0:0}", _userCounter.NextValue()),
-                             string.Format("idle.value {0:0}", _idleCounter.NextValue())
+                             string.Format("system.value {0:0}", _systemCounter.NextValue() *1000),
+                             string.Format("user.value {0:0}", _userCounter.NextValue() * 1000),
+                             string.Format("idle.value {0:0}", _idleCounter.NextValue() * 1000)
                          };
 
             return output.Combine();

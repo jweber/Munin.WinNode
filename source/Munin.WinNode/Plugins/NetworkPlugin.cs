@@ -45,10 +45,10 @@ namespace Munin.WinNode.Plugins
                        "graph_title Network Traffic",
                        "graph_order down up",
                        "graph_vlabel Bits per second",
-                       "down.cdef down,8,*",
+                       //"down.cdef down,8,*",
                        "down.draw AREA",
                        "down.label Received bps",
-                       "up.cdef up,8,*",
+                       //"up.cdef up,8,*",
                        "up.draw LINE1",
                        "up.label Sent bps"
                    }.Combine();
