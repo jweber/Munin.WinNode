@@ -72,7 +72,6 @@ namespace Munin.WinNode.Plugins
                 @"SELECT * FROM Win32_NetworkAdapter 
                 WHERE NetConnectionStatus=2
                 AND PhysicalAdapter = 1
-                AND Manufacturer != 'Microsoft'
                 AND NOT PNPDeviceID LIKE 'ROOT\\%'");
 
             var adapterObjects = search.Get();
