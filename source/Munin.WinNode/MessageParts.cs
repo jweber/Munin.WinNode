@@ -2,6 +2,12 @@
 
 namespace Munin.WinNode
 {
+    /// <summary>
+    /// Class for parsing requests from the client.
+    /// </summary>
+    /// <example>
+    /// Input: <c>fetch network</c>
+    /// </example>
     public class MessageParts
     {
         private MessageParts()
@@ -12,6 +18,12 @@ namespace Munin.WinNode
         public string Command { get; set; }
         public string[] Arguments { get; set; }
 
+        /// <summary>
+        /// Parses the <paramref name="input"/> and returns a hydrated <see cref="MessageParts"/>
+        /// object.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
         public static MessageParts FromString(string input)
         {
             if (string.IsNullOrWhiteSpace(input))

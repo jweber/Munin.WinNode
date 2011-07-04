@@ -9,7 +9,7 @@ namespace Munin.WinNode.Commands
             get { return "version"; }
         }
 
-        public bool EndWithPeriod
+        public bool EndResponseWithPeriod
         {
             get { return false; }
         }

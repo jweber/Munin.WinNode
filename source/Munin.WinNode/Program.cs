@@ -42,6 +42,9 @@ namespace Munin.WinNode
                 case "stop":
                     StopService();
                     break;
+                case "restart":
+                    RestartService();
+                    break;
                 default:
                     PrintUsage();
                     break;
@@ -85,6 +88,7 @@ Command line options:
     Munin.WinNode /uninstall     - stops and uninstalls the Windows service
     Munin.WinNode /start         - starts the installed Windows service
     Munin.WinNode /stop          - stops the installed Windows service
+    Munin.WinNode /restart       - restarts the installed Windows service
 ");
         }
 

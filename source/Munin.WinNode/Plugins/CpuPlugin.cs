@@ -13,15 +13,7 @@ namespace Munin.WinNode.Plugins
             _systemCounter = new PerformanceCounter("Processor", "% Privileged Time", "_Total");
             _idleCounter = new PerformanceCounter("Processor", "% Idle Time", "_Total");
 
-            InitializeCounters(_userCounter, _systemCounter, _idleCounter);
-        }
-
-        private void InitializeCounters(params PerformanceCounter[] counters)
-        {
-            foreach (var counter in counters)
-            {
-                var init = counter.NextValue();
-            }
+            PerformanceCounterHelper.InitializeCounters(_userCounter, _systemCounter, _idleCounter);
         }
 
         public string Name

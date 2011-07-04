@@ -74,6 +74,7 @@
     <Compile Include="Commands\VersionCommand.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="MessageParts.cs" />
+    <Compile Include="PerformanceCounterHelper.cs" />
     <Compile Include="Service\MuninWinNodeService.cs">
       <SubType>Component</SubType>
     </Compile>

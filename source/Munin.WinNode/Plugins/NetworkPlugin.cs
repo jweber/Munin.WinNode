@@ -23,22 +23,6 @@ namespace Munin.WinNode.Plugins
 
         public string GetConfiguration()
         {
-//            return new[]
-//                   {
-//                       "graph_title Network Traffic",
-//                       "graph_order down up",
-//                       "graph_args --base 1000",
-//                       "graph_vlabel bits in (-) / out (+) per second",
-//                       "graph_category network",
-//                       "graph_info This graph shows the traffic of the network interfaces.",
-//                       "down.label bps",
-//                       "down.type DERIVE",
-//                       "down.graph no",
-//                       "up.label bps",
-//                       "up.type DERIVE",
-//                       "up.negative down",
-//                   }.Combine();
-
             return new[]
                    {
                        "graph_args --base 1000 --lower-limit 0",
@@ -108,18 +92,9 @@ namespace Munin.WinNode.Plugins
 
             public NetworkAdapter(string name)
             {
-                name = name.Replace("\\", "_");
-                name = name.Replace("/", "_");
-                name = name.Replace("(", "[");
-                name = name.Replace(")", "]");
-                name = name.Replace("#", "_");
-
-                this.Name = name;
-                this._receivedPerformanceCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", name);
-                this._sentPerformanceCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", name);
-
-                var initReceive = _receivedPerformanceCounter.NextValue();
-                var initSent = _sentPerformanceCounter.NextValue();
+                this.Name = PerformanceCounterHelper.CleanName(name);
+                this._receivedPerformanceCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", this.Name).Initialize();
+                this._sentPerformanceCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", this.Name).Initialize();
             }
 
             public string Name { get; private set; }

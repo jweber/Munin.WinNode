@@ -7,7 +7,7 @@
             get { return "unknown"; }
         }
 
-        public bool EndWithPeriod
+        public bool EndResponseWithPeriod
         {
             get { return false; }
         }

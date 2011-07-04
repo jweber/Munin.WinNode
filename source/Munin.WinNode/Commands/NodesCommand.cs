@@ -13,7 +13,7 @@ namespace Munin.WinNode.Commands
             get { return "nodes"; }
         }
 
-        public bool EndWithPeriod
+        public bool EndResponseWithPeriod
         {
             get { return true; }
         }

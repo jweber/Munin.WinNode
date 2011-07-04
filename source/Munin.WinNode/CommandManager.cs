@@ -5,6 +5,9 @@ using Munin.WinNode.Commands;
 
 namespace Munin.WinNode
 {
+    /// <summary>
+    /// Class to manage the various commands that the Munin Node protocol defines.
+    /// </summary>
     static class CommandManager
     {
         static readonly IEnumerable<ICommand> _commands;
@@ -14,6 +17,11 @@ namespace Munin.WinNode
             _commands = FindCommands();
         }
 
+        /// <summary>
+        /// Registers any implementor of <see cref="ICommand"/> in the current
+        /// assembly.
+        /// </summary>
+        /// <returns></returns>
         static IEnumerable<ICommand> FindCommands()
         {
             return (from t in typeof(ICommand).Assembly.GetTypes()

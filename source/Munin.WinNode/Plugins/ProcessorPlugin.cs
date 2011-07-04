@@ -74,17 +74,9 @@ namespace Munin.WinNode.Plugins
 
             public Processor(string name)
             {
-                name = name.Replace("\\", "_");
-                name = name.Replace("/", "_");
-                name = name.Replace("(", "[");
-                name = name.Replace(")", "]");
-                name = name.Replace("#", "_");
+                this.Name = PerformanceCounterHelper.CleanName(name);
 
-                this.Name = name;
-
-                this._counter = new PerformanceCounter("Processor", "% Processor Time", name);
-
-                var init = _counter.NextValue();
+                this._counter = new PerformanceCounter("Processor", "% Processor Time", this.Name).Initialize();
             }
 
             public string Name { get; private set; }

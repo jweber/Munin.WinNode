@@ -122,7 +122,7 @@ namespace Munin.WinNode
             if (! string.IsNullOrEmpty(response))
             {
                 string responseMessage = string.Format("{1}{0}", Configuration.NewLine, response);
-                if (command.EndWithPeriod)
+                if (command.EndResponseWithPeriod)
                     responseMessage += "." + Configuration.NewLine;
 
                 var responseBytes = Encoding.ASCII.GetBytes(responseMessage);
