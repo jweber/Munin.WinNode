@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Munin.WinNode
 {
@@ -10,7 +11,7 @@ namespace Munin.WinNode
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string Combine(this string[] input)
+        public static string Combine(this IEnumerable<string> input)
         {
             return string.Join(Configuration.NewLine, input);
         }

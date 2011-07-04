@@ -44,17 +44,17 @@ namespace Munin.WinNode.Plugins
                             "system.label system",
                             "system.draw AREA",
                             "system.min 0",
-                            "system.type DERIVE",
+                            "system.type GAUGE",
                             "system.info CPU time spend by the kernel in system activities",
                             "user.label user",
                             "user.draw STACK",
                             "user.min 0",
-                            "user.type DERIVE",
+                            "user.type GAUGE",
                             "user.info CPU time spent by normal programs and daemons",
                             "idle.label idle",
                             "idle.draw STACK",
                             "idle.min 0",
-                            "idle.type DERIVE",
+                            "idle.type GAUGE",
                             "idle.info Idle CPU time"
                          };
 
@@ -65,9 +65,9 @@ namespace Munin.WinNode.Plugins
         {
             var output = new[]
                          {
-                             string.Format("system.value {0:0}", _systemCounter.NextValue() *1000),
-                             string.Format("user.value {0:0}", _userCounter.NextValue() * 1000),
-                             string.Format("idle.value {0:0}", _idleCounter.NextValue() * 1000)
+                             string.Format("system.value {0}", _systemCounter.NextValue()),
+                             string.Format("user.value {0}", _userCounter.NextValue()),
+                             string.Format("idle.value {0}", _idleCounter.NextValue())
                          };
 
             return output.Combine();
