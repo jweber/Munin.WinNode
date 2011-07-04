@@ -22,7 +22,7 @@ namespace Munin.WinNode
     {
         public ProjectServiceProcessInstaller()
         {
-            this.Account = ServiceAccount.NetworkService;
+            this.Account = ServiceAccount.LocalSystem;
         }
     }
 }
