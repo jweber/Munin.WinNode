@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Configuration.Install;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.ServiceProcess;
 using Munin.WinNode.Commands;
@@ -13,6 +12,8 @@ namespace Munin.WinNode
     {
         static void Main(string[] args)
         {
+            log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile));
+
             if (Environment.UserInteractive)
             {
                 ProcessArguments(args);

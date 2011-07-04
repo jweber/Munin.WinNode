@@ -37,7 +37,7 @@ namespace Munin.WinNode
             var retVal = new StringBuilder(255);
             var status = GetPrivateProfileString(section, key, defaultValue, retVal, 255, ConfigurationFilePath);
 
-            Trace.WriteLine(string.Format(@"Read configuration value {0}\{1} as '{2}'", section, key, retVal));
+            Logging.Logger.InfoFormat(@"Read configuration value {0}\{1} as '{2}'", section, key, retVal);
             
             return retVal.ToString();
         }

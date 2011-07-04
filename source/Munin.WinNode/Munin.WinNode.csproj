@@ -51,6 +51,9 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\lib\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
@@ -73,6 +76,7 @@
     <Compile Include="Commands\UnknownCommand.cs" />
     <Compile Include="Commands\VersionCommand.cs" />
     <Compile Include="IPlugin.cs" />
+    <Compile Include="Logging.cs" />
     <Compile Include="MessageParts.cs" />
     <Compile Include="PerformanceCounterHelper.cs" />
     <Compile Include="Service\MuninWinNodeService.cs">
@@ -100,6 +104,7 @@
     <None Include="munin-node.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

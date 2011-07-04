@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Management;
+using log4net;
 
 namespace Munin.WinNode.Plugins
 {
@@ -40,7 +41,7 @@ namespace Munin.WinNode.Plugins
 
         public string GetValues()
         {
-            Trace.WriteLine("Fetching network statistics");
+            Logging.Logger.Info("Fetching network statistics");
 
             return new[]
                    {
@@ -66,7 +67,7 @@ namespace Munin.WinNode.Plugins
         /// </summary>
         void EnumerateNetworkAdapters()
         {
-            Trace.WriteLine("Enumerating network adapters");
+            Logging.Logger.Info("Enumerating network adapters");
             var search = new ManagementObjectSearcher(
                 @"SELECT * FROM Win32_NetworkAdapter 
                 WHERE NetConnectionStatus=2
@@ -78,7 +79,7 @@ namespace Munin.WinNode.Plugins
             foreach (ManagementObject adapterObject in adapterObjects)
             {
                 string name = adapterObject["Name"].ToString();
-                Trace.WriteLine(" + Found network adapter named: " + name);
+                Logging.Logger.InfoFormat(" + Found network adapter named: {0}", name);
 
                 var networkAdapter = new NetworkAdapter(name);
                 _networkAdapters.Add(networkAdapter);
@@ -104,7 +105,7 @@ namespace Munin.WinNode.Plugins
                 get
                 {
                     var bps = _receivedPerformanceCounter.NextValue() * 8;
-                    Trace.WriteLine(string.Format(" + Adapter '{0}' received bps: {1}", this.Name, bps));
+                    Logging.Logger.InfoFormat(" + Adapter '{0}' received bps: {1}", this.Name, bps);
                     return bps;
                 }
             }
@@ -114,7 +115,7 @@ namespace Munin.WinNode.Plugins
                 get
                 {
                     var bps = _sentPerformanceCounter.NextValue() * 8;
-                    Trace.WriteLine(string.Format(" + Adapter '{0}' sent bps: {1}", this.Name, bps));
+                    Logging.Logger.InfoFormat(" + Adapter '{0}' sent bps: {1}", this.Name, bps);
                     return bps;
                 }
             }

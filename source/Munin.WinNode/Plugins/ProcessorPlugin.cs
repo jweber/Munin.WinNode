@@ -59,10 +59,10 @@ namespace Munin.WinNode.Plugins
 
         void EnumerateProcessors()
         {
-            Trace.WriteLine("Enumerating Processors");
+            Logging.Logger.Info("Enumerating Processors");
             for (int i = 0; i < System.Environment.ProcessorCount; i++)
             {
-                Trace.WriteLine(" + Found processor: " + i);
+                Logging.Logger.InfoFormat(" + Found processor: {0}", i);
                 var processor = new Processor(i.ToString());
                 _processors.Add(processor);
             }
@@ -86,7 +86,7 @@ namespace Munin.WinNode.Plugins
                 get
                 {
                     var value = _counter.NextValue();
-                    Trace.WriteLine(string.Format(" + Processor '{0}' time: {1}", this.Name, value));
+                    Logging.Logger.InfoFormat(" + Processor '{0}' time: {1}", this.Name, value);
                     return value;
                 }
             }
