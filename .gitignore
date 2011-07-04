@@ -36,3 +36,6 @@ ASPNETDB.MDF
 aspnetdb_log.ldf
 logs/
 *.docstates
+nunit-console-output.xml
+build/
+source/VersionInfo.cs

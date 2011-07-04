@@ -6,13 +6,13 @@ namespace Munin.WinNode
     [RunInstaller(true)]
     public sealed class ProjectServiceInstaller : ServiceInstaller
     {
-        public const string ServiceName = "Munin.WinNode";
+        public const string ProjectServiceName = "Munin.WinNode";
 
         public ProjectServiceInstaller()
         {
-            this.Description = ServiceName;
-            this.DisplayName = ServiceName;
-            base.ServiceName = ServiceName;
+            this.Description = ProjectServiceName;
+            this.DisplayName = ProjectServiceName;
+            this.ServiceName = ProjectServiceName;
             this.StartType = ServiceStartMode.Automatic;
         }
     }

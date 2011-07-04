@@ -106,7 +106,7 @@ Command line options:
 
         private static void StopService()
         {
-            var serviceController = new ServiceController(ProjectServiceInstaller.ServiceName);
+            var serviceController = new ServiceController(ProjectServiceInstaller.ProjectServiceName);
             if (serviceController.Status == ServiceControllerStatus.Running)
             {
                 serviceController.Stop();
@@ -116,7 +116,7 @@ Command line options:
 
         private static void StartService()
         {
-            var serviceController = new ServiceController(ProjectServiceInstaller.ServiceName);
+            var serviceController = new ServiceController(ProjectServiceInstaller.ProjectServiceName);
             if (serviceController.Status != ServiceControllerStatus.Running)
             {
                 serviceController.Start();
@@ -126,7 +126,7 @@ Command line options:
 
         private static void RestartService()
         {
-            var serviceController = new ServiceController(ProjectServiceInstaller.ServiceName);
+            var serviceController = new ServiceController(ProjectServiceInstaller.ProjectServiceName);
             if (serviceController.Status == ServiceControllerStatus.Running)
             {
                 serviceController.Stop();
@@ -149,7 +149,7 @@ Command line options:
             else
             {
                 ManagedInstallerClass.InstallHelper(new[] { Assembly.GetExecutingAssembly().Location });
-                var startController = new ServiceController(ProjectServiceInstaller.ServiceName);
+                var startController = new ServiceController(ProjectServiceInstaller.ProjectServiceName);
                 startController.Start();
             }
         }
@@ -162,7 +162,7 @@ Command line options:
             }
             else
             {
-                var serviceController = new ServiceController(ProjectServiceInstaller.ServiceName);
+                var serviceController = new ServiceController(ProjectServiceInstaller.ProjectServiceName);
                 if (serviceController.Status == ServiceControllerStatus.Running)
                     serviceController.Stop();
 
@@ -172,7 +172,7 @@ Command line options:
 
         private static bool ServiceIsInstalled()
         {
-            return ServiceController.GetServices().Any(s => s.ServiceName == ProjectServiceInstaller.ServiceName);
+            return ServiceController.GetServices().Any(s => s.ServiceName == ProjectServiceInstaller.ProjectServiceName);
         }
     }
 }
