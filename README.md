@@ -20,3 +20,7 @@ To uninstall the service, run:
 Info
 ----
 By default, port 4949 must be open for the node to be accessible by the server.
+
+License
+-------
+Apache 2.0
