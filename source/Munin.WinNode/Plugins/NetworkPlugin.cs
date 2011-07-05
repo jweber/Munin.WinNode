@@ -84,7 +84,8 @@ namespace Munin.WinNode.Plugins
             Logging.Logger.Info("Enumerating network adapters");
             var search = new ManagementObjectSearcher(
                 @"SELECT * FROM Win32_NetworkAdapter 
-                WHERE PhysicalAdapter = 1
+                WHERE NetConnectionStatus = 2
+                AND PhysicalAdapter = 1
                 AND NOT PNPDeviceID LIKE 'ROOT\\%'");
 
             var adapterObjects = search.Get();
