@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Management;
+using System.Net.NetworkInformation;
 using log4net;
 
 namespace Munin.WinNode.Plugins
 {
     class NetworkPlugin : IPlugin
     {
+        const string ConfigurationSection = "NetworkPlugin";
+
         readonly IList<NetworkAdapter> _networkAdapters;
 
         public NetworkPlugin()
@@ -67,11 +70,21 @@ namespace Munin.WinNode.Plugins
         /// </summary>
         void EnumerateNetworkAdapters()
         {
+            string adapterName = Configuration.GetValue(ConfigurationSection, "AdapterName", "*");
+            if (adapterName != "*")
+            {
+                adapterName = PerformanceCounterHelper.CleanName(adapterName);
+
+                Logging.Logger.InfoFormat("Using configured network adapter '{0}'", adapterName);
+                var networkAdapter = new NetworkAdapter(adapterName);
+                _networkAdapters.Add(networkAdapter);
+                return;
+            }
+
             Logging.Logger.Info("Enumerating network adapters");
             var search = new ManagementObjectSearcher(
                 @"SELECT * FROM Win32_NetworkAdapter 
-                WHERE NetConnectionStatus=2
-                AND PhysicalAdapter = 1
+                WHERE PhysicalAdapter = 1
                 AND NOT PNPDeviceID LIKE 'ROOT\\%'");
 
             var adapterObjects = search.Get();
