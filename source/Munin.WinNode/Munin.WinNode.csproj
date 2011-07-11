@@ -79,6 +79,11 @@
     <Compile Include="Logging.cs" />
     <Compile Include="MessageParts.cs" />
     <Compile Include="PerformanceCounterHelper.cs" />
+    <Compile Include="Plugins\CpuPlugin.cs" />
+    <Compile Include="Plugins\DiskPlugin.cs" />
+    <Compile Include="Plugins\MemoryPlugin.cs" />
+    <Compile Include="Plugins\NetworkPlugin.cs" />
+    <Compile Include="Plugins\ProcessorPlugin.cs" />
     <Compile Include="Service\MuninWinNodeService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -87,11 +92,6 @@
     </Compile>
     <Compile Include="OutputExtensions.cs" />
     <Compile Include="PluginManager.cs" />
-    <Compile Include="Plugins\CpuPlugin.cs" />
-    <Compile Include="Plugins\DiskPlugin.cs" />
-    <Compile Include="Plugins\MemoryPlugin.cs" />
-    <Compile Include="Plugins\NetworkPlugin.cs" />
-    <Compile Include="Plugins\ProcessorPlugin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Service\ProjectServiceInstaller.cs">
       <SubType>Component</SubType>
@@ -129,6 +129,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>REM xcopy $(SolutionDir)Munin.WinNode.Plugins\bin\$(ConfigurationName)\Munin.WinNode.Plugins.dll $(TargetDir)EnabledPlugins\ /Y
+if not exist $(TargetDir)EnabledPlugins\ mkdir $(TargetDir)EnabledPlugins\
+if not exist $(TargetDir)AvailablePlugins\ mkdir $(TargetDir)AvailablePlugins\</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -19,13 +19,16 @@ namespace Munin.WinNode.Commands
 
             response = string.Format("Munin.WinNode on {0} version: {1}",
                                      Dns.GetHostName(),
-                                     GetVersionString());
+                                     GetVersionString(true));
         }
 
-        public static string GetVersionString()
+        public static string GetVersionString(bool includeRevision = false)
         {
             var version = typeof(Program).Assembly.GetName().Version;
-            return string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build);
+            if (! includeRevision)
+                return string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build);
+
+            return version.ToString();
         }
     }
 }

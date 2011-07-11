@@ -2,7 +2,7 @@
 
 namespace Munin.WinNode
 {
-    static class PerformanceCounterHelper
+    public static class PerformanceCounterHelper
     {
         public static string CleanName(string name)
         {

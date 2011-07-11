@@ -9,6 +9,11 @@ namespace Munin.WinNode.Plugins
             get { return "memory"; }
         }
 
+        public bool IsApplicable
+        {
+            get { return true; }
+        }
+
         public string GetConfiguration()
         {
             return new[]

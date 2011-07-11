@@ -1,22 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace Munin.WinNode
 {
     static class PluginManager
     {
-        static IEnumerable<IPlugin> _plugins;
-        
+        static List<IPlugin> _plugins = new List<IPlugin>();
+       
         /// <summary>
         /// Registers all plugins
         /// </summary>
         public static void RegisterPlugins()
         {
-            _plugins = (from t in typeof(IPlugin).Assembly.GetTypes()
-                        where typeof(IPlugin).IsAssignableFrom(t)
-                              && ! t.IsInterface
-                        select Activator.CreateInstance(t)).Cast<IPlugin>().ToList();
+            RegisterPlugins(Assembly.GetCallingAssembly());
+            RegisterExternalPlugins();
+        }
+
+        static void RegisterExternalPlugins()
+        {
+            string enabledPluginsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EnabledPlugins");
+            var assemblyPaths = Directory.GetFiles(enabledPluginsPath, "*.dll", SearchOption.TopDirectoryOnly);
+
+            foreach ( var assemblyPath in assemblyPaths )
+            {
+
+                byte[] assemblyBytes = null;
+                try
+                {
+                    assemblyBytes = File.ReadAllBytes(assemblyPath);
+                }
+                catch (Exception e)
+                {
+                    Logging.Error("Failed to read in assembly '{0}'", assemblyPath);
+                }
+
+                if (assemblyBytes != null)
+                {
+                    try
+                    {
+                        RegisterPlugins(AppDomain.CurrentDomain.Load(assemblyBytes));    
+                    }
+                    catch (Exception e)
+                    {
+                        Logging.Error("Failed initializing plugins from assembly '{0}'", assemblyPath);
+                    }
+                }
+            }
+        }
+
+        static void RegisterPlugins(Assembly assembly)
+        {
+            var assemblyPlugins = (from p in assembly.GetTypes()
+                                   where typeof(IPlugin).IsAssignableFrom(p)
+                                         && ! p.IsInterface
+                                   select p).ToList();
+
+            foreach (var assemblyPlugin in assemblyPlugins)
+            {
+                try
+                {
+                    var plugin = (IPlugin) Activator.CreateInstance(assemblyPlugin);
+                    if (!plugin.IsApplicable)
+                        continue;
+
+                    Logging.Info("Registered the '{0}' plugin from '{1}'", plugin.Name, plugin.GetType().FullName);
+                    _plugins.Add(plugin);
+                }
+                catch (Exception)
+                {
+                    Logging.Error("Failed to initialize the plugin from type '{0}'", assemblyPlugin.FullName);
+                }
+            }
         }
 
         /// <summary>
