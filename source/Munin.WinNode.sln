@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{98C12E30
 		..\rakefile.rb = ..\rakefile.rb
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Munin.WinNode.Plugins.AspNet", "Munin.WinNode.Plugins.AspNet\Munin.WinNode.Plugins.AspNet.csproj", "{F991B45B-2BED-4119-97AB-4B629C21B7DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,8 +44,21 @@ Global
 		{071C96ED-760A-45A7-B9B5-C8B62BD422E6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{071C96ED-760A-45A7-B9B5-C8B62BD422E6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{071C96ED-760A-45A7-B9B5-C8B62BD422E6}.Release|x86.ActiveCfg = Release|Any CPU
+		{F991B45B-2BED-4119-97AB-4B629C21B7DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F991B45B-2BED-4119-97AB-4B629C21B7DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F991B45B-2BED-4119-97AB-4B629C21B7DC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F991B45B-2BED-4119-97AB-4B629C21B7DC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F991B45B-2BED-4119-97AB-4B629C21B7DC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F991B45B-2BED-4119-97AB-4B629C21B7DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F991B45B-2BED-4119-97AB-4B629C21B7DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F991B45B-2BED-4119-97AB-4B629C21B7DC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F991B45B-2BED-4119-97AB-4B629C21B7DC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F991B45B-2BED-4119-97AB-4B629C21B7DC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F991B45B-2BED-4119-97AB-4B629C21B7DC} = {CE508C89-099C-4574-962F-51629A633D51}
 	EndGlobalSection
 EndGlobal

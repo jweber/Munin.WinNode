@@ -21,8 +21,8 @@ namespace Munin.WinNode
 
         static void RegisterExternalPlugins()
         {
-            string enabledPluginsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EnabledPlugins");
-            var assemblyPaths = Directory.GetFiles(enabledPluginsPath, "*.dll", SearchOption.TopDirectoryOnly);
+            string pluginsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins");
+            var assemblyPaths = Directory.GetFiles(pluginsPath, "*.dll", SearchOption.TopDirectoryOnly);
 
             foreach ( var assemblyPath in assemblyPaths )
             {
@@ -32,7 +32,7 @@ namespace Munin.WinNode
                 {
                     assemblyBytes = File.ReadAllBytes(assemblyPath);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Logging.Error("Failed to read in assembly '{0}'", assemblyPath);
                 }
@@ -43,9 +43,16 @@ namespace Munin.WinNode
                     {
                         RegisterPlugins(AppDomain.CurrentDomain.Load(assemblyBytes));    
                     }
-                    catch (Exception e)
+                    catch (ReflectionTypeLoadException ex)
                     {
-                        Logging.Error("Failed initializing plugins from assembly '{0}'", assemblyPath);
+                        foreach (var e in ex.LoaderExceptions)
+                        {
+                            Logging.Error("Reflection type load exception", e);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.Error(string.Format("Failed initializing plugins from assembly '{0}'", assemblyPath), ex);
                     }
                 }
             }
@@ -64,7 +71,10 @@ namespace Munin.WinNode
                 {
                     var plugin = (IPlugin) Activator.CreateInstance(assemblyPlugin);
                     if (!plugin.IsApplicable)
+                    {
+                        Logging.Debug("Skipped plugin '{0} due to being not applicable'", plugin.Name);
                         continue;
+                    }
 
                     Logging.Info("Registered the '{0}' plugin from '{1}'", plugin.Name, plugin.GetType().FullName);
                     _plugins.Add(plugin);

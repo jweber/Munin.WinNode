@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System;
+using log4net;
 
 namespace Munin.WinNode
 {
@@ -30,6 +31,11 @@ namespace Munin.WinNode
         public static void Error(string message, params object[] args)
         {
             _logInstance.ErrorFormat(message, args);
+        }
+
+        public static void Error(string message, Exception exception)
+        {
+            _logInstance.Error(message, exception);
         }
 
         public static void Fatal(string message, params object[] args)
