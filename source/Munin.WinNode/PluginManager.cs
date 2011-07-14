@@ -8,7 +8,7 @@ namespace Munin.WinNode
 {
     static class PluginManager
     {
-        static List<IPlugin> _plugins = new List<IPlugin>();
+        static readonly List<IPlugin> _plugins = new List<IPlugin>();
        
         /// <summary>
         /// Registers all plugins
@@ -41,14 +41,7 @@ namespace Munin.WinNode
                 {
                     try
                     {
-                        RegisterPlugins(AppDomain.CurrentDomain.Load(assemblyBytes));    
-                    }
-                    catch (ReflectionTypeLoadException ex)
-                    {
-                        foreach (var e in ex.LoaderExceptions)
-                        {
-                            Logging.Error("Reflection type load exception", e);
-                        }
+                        RegisterPlugins(AppDomain.CurrentDomain.Load(assemblyBytes));
                     }
                     catch (Exception ex)
                     {
