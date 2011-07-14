@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 
 namespace Munin.WinNode
 {
-    static class PerformanceCounterHelper
+    public static class PerformanceCounterHelper
     {
         public static string CleanName(string name)
         {
@@ -13,6 +14,17 @@ namespace Munin.WinNode
             name = name.Replace("#", "_");
 
             return name;
+        }
+
+        /// <summary>
+        /// Returns <c>true</c> if the <paramref name="category"/> exists
+        /// as a PerformanceCounter category on the local system.
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        public static bool CategoryExists(string category)
+        {
+            return PerformanceCounterCategory.GetCategories().Any(m => m.CategoryName == category);
         }
 
         /// <summary>

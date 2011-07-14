@@ -21,6 +21,11 @@ namespace Munin.WinNode.Plugins
             get { return "cpu"; }
         }
 
+        public bool IsApplicable
+        {
+            get { return true; }
+        }
+
         public string GetConfiguration()
         {
             var output = new[]

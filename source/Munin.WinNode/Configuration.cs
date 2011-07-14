@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Munin.WinNode
 {
-    static class Configuration
+    public static class Configuration
     {
         const string ConfigurationFileName = "munin-node.ini";
 
@@ -37,7 +37,7 @@ namespace Munin.WinNode
             var retVal = new StringBuilder(255);
             var status = GetPrivateProfileString(section, key, defaultValue, retVal, 255, ConfigurationFilePath);
 
-            Logging.Logger.InfoFormat(@"Read configuration value {0}\{1} as '{2}'", section, key, retVal);
+            Logging.Debug(@"Read configuration value {0}\{1} as '{2}'", section, key, retVal);
             
             return retVal.ToString();
         }

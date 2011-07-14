@@ -44,7 +44,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
@@ -54,7 +54,7 @@
   <ItemGroup>
     <Reference Include="log4net">
       <HintPath>..\..\lib\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
@@ -79,6 +79,11 @@
     <Compile Include="Logging.cs" />
     <Compile Include="MessageParts.cs" />
     <Compile Include="PerformanceCounterHelper.cs" />
+    <Compile Include="Plugins\CpuPlugin.cs" />
+    <Compile Include="Plugins\DiskPlugin.cs" />
+    <Compile Include="Plugins\MemoryPlugin.cs" />
+    <Compile Include="Plugins\NetworkPlugin.cs" />
+    <Compile Include="Plugins\ProcessorPlugin.cs" />
     <Compile Include="Service\MuninWinNodeService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -87,11 +92,6 @@
     </Compile>
     <Compile Include="OutputExtensions.cs" />
     <Compile Include="PluginManager.cs" />
-    <Compile Include="Plugins\CpuPlugin.cs" />
-    <Compile Include="Plugins\DiskPlugin.cs" />
-    <Compile Include="Plugins\MemoryPlugin.cs" />
-    <Compile Include="Plugins\NetworkPlugin.cs" />
-    <Compile Include="Plugins\ProcessorPlugin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Service\ProjectServiceInstaller.cs">
       <SubType>Component</SubType>
@@ -128,7 +128,15 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\lib\log4net.1.2.10\lib\2.0\log4net.dll">
+      <Link>Resources\log4net.dll</Link>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist $(TargetDir)Plugins\ mkdir $(TargetDir)Plugins\</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -51,18 +51,7 @@ task :package => :compile do
     
   cp_r Dir.glob("source/Munin.WinNode/bin/#{$config}/**"), assemble_path, :verbose => true
   rm Dir.glob("#{assemble_path}/log.*")
-  
-  #ilmerge
-  exec = Exec.new
-  exec.command = "tools/ILMerge/ILMerge.exe"
-  exec.parameters ["/target:exe", "/targetplatform:v4", "/ndebug", "/internalize", "/lib:#{assemble_path}", "/out:#{assemble_path}/Munin.WinNode.Merged.exe", "Munin.WinNode.exe", "log4net.dll"]
-  exec.execute  
-  
-  rm Dir.glob(File.join(assemble_path, "log4net*"))
-  rm File.join(assemble_path, "Munin.WinNode.exe")
-  rm File.join(assemble_path, "Munin.WinNode.pdb")
-  mv File.join(assemble_path, "Munin.WinNode.Merged.exe"), File.join(assemble_path, "Munin.WinNode.exe")
-    
+     
   zip_directory(assemble_path, File.join(build_path, "Munin.WinNode-#{BUILD_NUMBER}.zip"))
   rm_rf assemble_path
 end
@@ -80,13 +69,13 @@ def zip_directory(assemble_path, output_path)
 end
 
 def get_commit_hash_and_date
-	begin
-		commit = `git log -1 --pretty=format:%H`
-		git_date = `git log -1 --date=iso --pretty=format:%ad`
-		commit_date = DateTime.parse( git_date ).strftime("%Y-%m-%d %H%M%S")
-	rescue
-		commit = "git unavailable"
-	end
-
-	[commit, commit_date]
+  begin
+    commit = `git log -1 --pretty=format:%H`
+    git_date = `git log -1 --date=iso --pretty=format:%ad`
+    commit_date = DateTime.parse( git_date ).strftime("%Y-%m-%d %H%M%S")
+  rescue
+    commit = "git unavailable"
+  end
+  
+  [commit, commit_date]
 end

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Management;
-using System.Net.NetworkInformation;
-using log4net;
 
 namespace Munin.WinNode.Plugins
 {
@@ -25,6 +22,11 @@ namespace Munin.WinNode.Plugins
             get { return "network"; }
         }
 
+        public bool IsApplicable
+        {
+            get { return true; }
+        }
+
         public string GetConfiguration()
         {
             return new[]
@@ -32,11 +34,10 @@ namespace Munin.WinNode.Plugins
                        "graph_args --base 1000 --lower-limit 0",
                        "graph_title Network Traffic",
                        "graph_order down up",
+                       "graph_category network",
                        "graph_vlabel Bits per second",
-                       //"down.cdef down,8,*",
                        "down.draw AREA",
                        "down.label Received bps",
-                       //"up.cdef up,8,*",
                        "up.draw LINE1",
                        "up.label Sent bps"
                    }.Combine();
@@ -44,7 +45,7 @@ namespace Munin.WinNode.Plugins
 
         public string GetValues()
         {
-            Logging.Logger.Info("Fetching network statistics");
+            Logging.Debug("Fetching network statistics");
 
             return new[]
                    {
@@ -75,13 +76,13 @@ namespace Munin.WinNode.Plugins
             {
                 adapterName = PerformanceCounterHelper.CleanName(adapterName);
 
-                Logging.Logger.InfoFormat("Using configured network adapter '{0}'", adapterName);
+                Logging.Debug("Using configured network adapter '{0}'", adapterName);
                 var networkAdapter = new NetworkAdapter(adapterName);
                 _networkAdapters.Add(networkAdapter);
                 return;
             }
 
-            Logging.Logger.Info("Enumerating network adapters");
+            Logging.Debug("Enumerating network adapters");
             var search = new ManagementObjectSearcher(
                 @"SELECT * FROM Win32_NetworkAdapter 
                 WHERE NetConnectionStatus = 2
@@ -92,7 +93,7 @@ namespace Munin.WinNode.Plugins
             foreach (ManagementObject adapterObject in adapterObjects)
             {
                 string name = adapterObject["Name"].ToString();
-                Logging.Logger.InfoFormat(" + Found network adapter named: {0}", name);
+                Logging.Debug(" + Found network adapter named: {0}", name);
 
                 var networkAdapter = new NetworkAdapter(name);
                 _networkAdapters.Add(networkAdapter);
@@ -118,7 +119,7 @@ namespace Munin.WinNode.Plugins
                 get
                 {
                     var bps = _receivedPerformanceCounter.NextValue() * 8;
-                    Logging.Logger.InfoFormat(" + Adapter '{0}' received bps: {1}", this.Name, bps);
+                    Logging.Debug(" + Adapter '{0}' received bps: {1}", this.Name, bps);
                     return bps;
                 }
             }
@@ -128,7 +129,7 @@ namespace Munin.WinNode.Plugins
                 get
                 {
                     var bps = _sentPerformanceCounter.NextValue() * 8;
-                    Logging.Logger.InfoFormat(" + Adapter '{0}' sent bps: {1}", this.Name, bps);
+                    Logging.Debug(" + Adapter '{0}' sent bps: {1}", this.Name, bps);
                     return bps;
                 }
             }

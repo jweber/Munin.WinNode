@@ -13,6 +13,12 @@ namespace Munin.WinNode.Plugins
             get { return "df"; }
         }
 
+        public bool IsApplicable
+        {
+            get { return true; }
+        }
+
+
         private DriveInfo[] GetDrives()
         {
             return DriveInfo.GetDrives()

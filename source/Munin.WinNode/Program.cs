@@ -12,7 +12,9 @@ namespace Munin.WinNode
     {
         static void Main(string[] args)
         {
-            log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile));
+            AppDomain.CurrentDomain.AssemblyResolve += EmbeddedAssemblyResolver;
+
+            ConfigureLog4Net();
 
             if (Environment.UserInteractive)
             {
@@ -21,6 +23,28 @@ namespace Munin.WinNode
             else
             {
                 ServiceBase.Run(new MuninWinNodeService());
+            }
+        }
+
+        /// <summary>
+        /// All references to embedded DLL assembly resources need to be out of the <c>Main</c> method
+        /// as the JIT compilation will attempt to load the assembly before our overloaded AssemblyResolve
+        /// delegate has been added.
+        /// </summary>
+        static void ConfigureLog4Net()
+        {
+            log4net.Config.XmlConfigurator.ConfigureAndWatch(new FileInfo(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile));
+        }
+
+        static Assembly EmbeddedAssemblyResolver(object sender, ResolveEventArgs args)
+        {
+            var resourceName = string.Format("Munin.WinNode.Resources.{0}.dll", new AssemblyName(args.Name).Name);
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            {
+                var assemblyData = new byte[stream.Length];
+                stream.Read(assemblyData, 0, assemblyData.Length);
+
+                return Assembly.Load(assemblyData);
             }
         }
 

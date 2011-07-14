@@ -52,7 +52,7 @@ namespace Munin.WinNode
 
         private void ListenForClient()
         {
-            Logging.Logger.Info("Waiting for connection...");
+            Logging.Info("Waiting for connection...");
             this._listener.Start();
             while (true)
             {
@@ -65,7 +65,7 @@ namespace Munin.WinNode
         private void HandleClient(object client)
         {
             var tcpClient = (TcpClient) client;
-            Logging.Logger.InfoFormat("Received connection from {0}", tcpClient.Client.RemoteEndPoint);
+            Logging.Info("Received connection from {0}", tcpClient.Client.RemoteEndPoint);
             
             var data = new byte[tcpClient.ReceiveBufferSize];
             var dataString = new StringBuilder();
@@ -79,7 +79,7 @@ namespace Munin.WinNode
                 while ((readCount = stream.Read(data, 0, tcpClient.ReceiveBufferSize)) != 0)
                 {
                     dataString.Append(Encoding.ASCII.GetString(data, 0, readCount));
-                    Logging.Logger.InfoFormat("Input: {0}", Regex.Replace(dataString.ToString(), @"\r?\n", string.Empty));
+                    Logging.Debug("Input: {0}", Regex.Replace(dataString.ToString(), @"\r?\n", string.Empty));
                     if (Regex.IsMatch(dataString.ToString(), @"\r?\n"))
                     {
                         string message = NormalizeMessage(dataString.ToString());
@@ -92,7 +92,7 @@ namespace Munin.WinNode
                     }
                 }
 
-                Logging.Logger.InfoFormat("Closing connection from {0}", tcpClient.Client.RemoteEndPoint);
+                Logging.Info("Closing connection from {0}", tcpClient.Client.RemoteEndPoint);
             }
 
             tcpClient.Close();
@@ -128,7 +128,7 @@ namespace Munin.WinNode
                 var responseBytes = Encoding.ASCII.GetBytes(responseMessage);
                 stream.Write(responseBytes, 0, responseBytes.Length);
 
-                Logging.Logger.InfoFormat("Response: {0}{1}{0}", Configuration.NewLine, responseMessage);
+                Logging.Debug("Response: {0}{1}{0}", Configuration.NewLine, responseMessage);
             }
         }
     }
