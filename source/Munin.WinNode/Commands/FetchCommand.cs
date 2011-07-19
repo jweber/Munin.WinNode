@@ -38,7 +38,17 @@ namespace Munin.WinNode.Commands
 
         protected virtual string PluginValue(IPlugin plugin)
         {
-            return plugin.GetValues();
+            try
+            {
+                return plugin.GetValues();
+            }
+            catch (Exception ex)
+            {
+                string message = string.Format("Plugin '{0}' threw exception when attempting to obtain values", plugin.Name);
+                Logging.Error(message, ex);
+            }
+
+            return string.Empty;
         }
     }
 }

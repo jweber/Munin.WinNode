@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Munin.WinNode.Plugins.AspNet
@@ -80,12 +81,44 @@ namespace Munin.WinNode.Plugins.AspNet
 
             public float BytesReceivedTotal
             {
-                get { return _bytesReceivedCounter.NextValue(); }
+                get
+                {
+                    float nextValue = 0f;
+                    try
+                    {
+                        nextValue = _bytesReceivedCounter.NextValue();
+                    } 
+                    catch (Exception ex)
+                    {
+                        string message = string.Format( "Plugin '{0}' threw an exception when attempting to retrieve the NextValue for counter '{1}'",
+                                          "aspnet_requesttransfer",
+                                          _bytesReceivedCounter.CounterName);
+                        Logging.Error(message, ex);
+                    }
+                    
+                    return nextValue;
+                }
             }
 
             public float BytesSentTotal
             {
-                get { return _bytesSentCounter.NextValue(); }
+                get
+                {
+                    float nextValue = 0f;
+                    try
+                    {
+                        nextValue = _bytesSentCounter.NextValue();
+                    } 
+                    catch (Exception ex)
+                    {
+                        string message = string.Format( "Plugin '{0}' threw an exception when attempting to retrieve the NextValue for counter '{1}'",
+                                          "aspnet_requesttransfer",
+                                          _bytesSentCounter.CounterName);
+                        Logging.Error(message, ex);
+                    }
+                    
+                    return nextValue;
+                }
             }
         }
     }

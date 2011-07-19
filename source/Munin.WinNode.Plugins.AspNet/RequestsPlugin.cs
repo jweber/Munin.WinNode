@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 
@@ -73,7 +74,20 @@ namespace Munin.WinNode.Plugins.AspNet
             foreach (var counter in _counters)
             {
                 string prefix = GetInstanceName(counter);
-                output.Add(string.Format("{0}.value {1:0}", prefix, counter.NextValue()));
+                float nextValue = 0f;
+                try
+                {
+                    nextValue = counter.NextValue();
+                } 
+                catch (Exception ex)
+                {
+                    string message = string.Format( "Plugin '{0}' threw an exception when attempting to retrieve the NextValue for counter '{1}'",
+                                      Name,
+                                      counter.CounterName);
+                    Logging.Error(message, ex);
+                }
+
+                output.Add(string.Format("{0}.value {1:0}", prefix, nextValue));
             }
 
             return output.Combine();           
