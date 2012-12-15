@@ -1,25 +1,26 @@
 require 'albacore'
 require 'fileutils'
+require 'semver'
 
-VERSION = '1.0.0'
-BUILD_NUMBER = "#{VERSION}.#{Date.today.strftime('%y%j')}"
+CLR_TOOLS_VERSION = 'v4.0.30319'
+ARTIFACTS_PATH = "build"
 
 $config = ENV['config'] || 'Debug'
 
 task :default => :compile
 
 desc 'Generate the VersionInfo.cs class'
-assemblyinfo :version do |asm|
-  commit_data = get_commit_hash_and_date
-  commit = commit_data[0]
-  commit_date = commit_data[1]
+assemblyinfo :version => [:versioning] do |asm|
+  git_data = commit_data()
+  revision_hash = git_data[0]
+  revision_date = git_data[1]
     
-  asm.version = VERSION + ".0"
-  asm.file_version = BUILD_NUMBER
-  asm.output_file = "source/VersionInfo.cs"
+  asm.version = FORMAL_VERSION
+  asm.file_version = FORMAL_VERSION
   asm.product_name = "Munin.WinNode"
-  asm.description = "Git commit hash: #{commit} - #{commit_date}"
-  asm.custom_attributes :AssemblyInformationalVersion => "#{asm.version}"
+  asm.description = "Git commit hash: #{revision_hash} - #{revision_date}"
+  asm.custom_attributes :AssemblyInformationalVersion => "#{BUILD_VERSION}"
+  asm.output_file = "source/VersionInfo.cs"
   asm.namespaces 'System', 'System.Reflection'  
 end
 
@@ -32,28 +33,46 @@ end
 
 desc 'Run tests'
 nunit :test => :compile do |nunit|
+  include FileUtils
+  mkpath ARTIFACTS_PATH unless Dir.exists? ARTIFACTS_PATH
+  
   nunit.command = nunit_path
   nunit.assemblies "source/Munin.WinNode.Tests/bin/#{$config}/Munin.WinNode.Tests.dll"
-  nunit.options '/xml=nunit-console-output.xml'
+  #nunit.options '/xml=nunit-console-output.xml'
+  
+  nunit.options = "/framework=#{CLR_TOOLS_VERSION}", '/noshadow', '/nologo', '/labels', "\"/xml=#{File.join(ARTIFACTS_PATH, "nunit-test-results.xml")}\""
 end
 
 desc 'Builds release package'
 task :package => :compile do
   include FileUtils
   
-  build_path = "build"
-  mkpath build_path unless Dir.exists? build_path
-  rm_rf Dir.glob(File.join(build_path, "**/*"))
+  assemble_path = File.join(ARTIFACTS_PATH, "assemble")
   
-  assemble_path = "build/assemble"
+  mkpath ARTIFACTS_PATH unless Dir.exists? ARTIFACTS_PATH
+  rm_rf Dir.glob(File.join(ARTIFACTS_PATH, "**/*.zip"))
+  rm_rf assemble_path if Dir.exists? assemble_path
+    
   mkpath assemble_path unless Dir.exists? assemble_path 
   rm_rf Dir.glob(File.join(assemble_path, "**/*"))
     
   cp_r Dir.glob("source/Munin.WinNode/bin/#{$config}/**"), assemble_path, :verbose => true
   rm Dir.glob("#{assemble_path}/log.*")
      
-  zip_directory(assemble_path, File.join(build_path, "Munin.WinNode-#{BUILD_NUMBER}.zip"))
-  rm_rf assemble_path
+  zip_directory(assemble_path, File.join(ARTIFACTS_PATH, "Munin.WinNode-#{BUILD_VERSION}.zip"))
+  rm_rf assemble_path if Dir.exists? assemble_path
+end
+
+desc 'Builds version environment variables'
+task :versioning do
+  ver = SemVer.find
+  revision = (ENV['BUILD_NUMBER'] || ver.patch).to_i
+  var = SemVer.new(ver.major, ver.minor, revision, ver.special)
+  
+  ENV['BUILD_VERSION'] = BUILD_VERSION = ver.format("%M.%m.%p%s") + ".#{commit_data()[0]}"
+  ENV['NUGET_VERSION'] = NUGET_VERSION = ver.format("%M.%m.%p%s")
+  ENV['FORMAL_VERSION'] = FORMAL_VERSION = "#{ SemVer.new(ver.major, ver.minor, revision).format "%M.%m.%p"}"
+  puts "##teamcity[buildNumber '#{BUILD_VERSION}']"  
 end
 
 def nunit_path()
@@ -68,14 +87,16 @@ def zip_directory(assemble_path, output_path)
   zip.execute  
 end
 
-def get_commit_hash_and_date
+def commit_data
   begin
-    commit = `git log -1 --pretty=format:%H`
+    commit = `git rev-parse --short HEAD`.chomp()
     git_date = `git log -1 --date=iso --pretty=format:%ad`
-    commit_date = DateTime.parse( git_date ).strftime("%Y-%m-%d %H%M%S")
-  rescue
-    commit = "git unavailable"
+	commit_date = DateTime.parse(git_date).strftime("%Y-%m-%d %H%M%S")
+  rescue Exception => e
+    puts e.inspect
+	commit = (ENV['BUILD_VCS_NUMBER'] || "000000")
+	commit_date = Time.new.strftime("%Y-%m-%d %H%M%S")
   end
-  
   [commit, commit_date]
-end
+ end
+ 
